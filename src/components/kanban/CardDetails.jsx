@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { MdTaskAlt } from 'react-icons/md';
+import { MdTaskAlt, MdOutlineCheckBox, MdCreditCard } from 'react-icons/md';
 import { GrFormClose } from 'react-icons/gr';
 import { CgTrash } from 'react-icons/cg';
+import { BsClock, BsTag } from 'react-icons/bs';
+import ProgressBar from '@ramonak/react-progress-bar';
 
 import Editable from './Editable';
 import Modal from './Modal';
@@ -108,71 +110,74 @@ const CardDetails = (props) => {
   }, [values]);
 
   return (
-    <>
-      <Modal onClose={props.onClose}>
-        <div>
-          <div className="container">
-            <div className="flex pb-4">
-              <div className="col-span-12">
-                <div className="flex items-center pt-3 gap-2">
-                  <MdTaskAlt />
-                  {input ? (
-                    <Input />
-                  ) : (
-                    <h5 onClick={() => setInput(true)}>{values.title}</h5>
-                  )}
-                </div>
+    <Modal onClose={props.onClose}>
+      <div className="w-full">
+        <div className="container flex flex-row justify-around">
+          <div className="w-full flex flex-col">
+            <div className="w-full">
+              <div className="flex items-center gap-3">
+                <MdCreditCard className="text-2xl" />
+                {input ? (
+                  <Input />
+                ) : (
+                  <h5
+                    onClick={() => setInput(true)}
+                    className="text-2xl capitalize font-bold"
+                  >
+                    {values.title}
+                  </h5>
+                )}
               </div>
             </div>
 
-            <div className="flex flex-row">
-              <div className="col-span-8">
-                <h6 className="text-justify">Label</h6>
-                <div className="w-10 pr-1">
-                  {(values.tags.length ?? []) !== 0 ? (
-                    (values.tags ?? []).map((item) => (
-                      <span className="flex justify-between items-center gap-2">
-                        {item.tagName.length > 10
-                          ? item.tagName.slice(0, 6) + '...'
-                          : item.tagName}
-                        <GrFormClose onClick={() => removeTag(item.id)} />
+            <div className="flex justify-between px-2">
+              <div className="flex flex-col justify-between">
+                <div className="flex flex-col gap-3">
+                  <h5 className="text-justify mt-2 text-lg">Label</h5>
+                  <div className="w-full pr-1">
+                    {(values.tags.length ?? []) !== 0 ? (
+                      (values.tags ?? []).map((item) => (
+                        <span className="justify-between items-center gap-2">
+                          {item.tagName.length > 10
+                            ? item.tagName.slice(0, 6) + '...'
+                            : item.tagName}
+                          <GrFormClose onClick={() => removeTag(item.id)} />
+                        </span>
+                      ))
+                    ) : (
+                      <span className="flex justify-between items-center gap-2 text-slate-400 italic">
+                        No Labels
                       </span>
-                    ))
-                  ) : (
-                    <span className="flex justify-between items-center gap-2">
-                      No Label
-                    </span>
-                  )}
+                    )}
+                  </div>
                 </div>
 
-                <div className="flex items-end justify-between">
-                  <div className="flex items-center gap-2">
+                <div className="flex items-center justify-between gap-10 pt-5">
+                  <div className="flex items-center gap-3">
+                    <MdOutlineCheckBox className="text-xl" />
                     <h6>Check List</h6>
                   </div>
-                  <div className="">
+                  <div className="bg-slate-200 py-2 px-4 rounded-lg shadow-lg hover:bg-white pointer">
                     <button onClick={() => deleteAllTask()}>Delete All</button>
                   </div>
                 </div>
+                {/* bg-slate-200 hover:bg-white rounded-lg px-4 py-2 pointer flex items-center gap-1 shadow-lg w-full */}
 
                 <div className="my-2">
-                  <div className="flex">
-                    <div
-                      className=""
-                      role="progressbar"
-                      style={{ width: calculatePercentage() + '%' }}
-                      aria-valuenow="75"
-                      areia-valuemin="0"
-                      aria-valuemax="100"
-                    >
-                      {calculatePercentage() + '%'}
-                    </div>
-                  </div>
+                  <div>Progress(%)</div>
+                  <ProgressBar
+                    completed={calculatePercentage()}
+                    bgColor="#61bd4f"
+                    width="25rem"
+                    height="20px"
+                  />
                 </div>
 
-                <div className="my-2">
-                  {(values.task.length ?? []) !== 0 ? (
-                    (values.task.map ?? [])((item, index) => (
-                      <div className="flex items-start gap-2">
+                <div className="my-2 w-full">
+                  {console.log('Card Details:', values.task)}
+                  {values.task.length !== 0 ? (
+                    values.task.map((item, index) => (
+                      <div className="flex items-center gap-2 pb-3 text-xl">
                         <input
                           type="checkbox"
                           defaultChecked={item.completed}
@@ -181,8 +186,10 @@ const CardDetails = (props) => {
                           }}
                         />
                         <h6
-                          className={`flex ${
-                            item.completed === true ? 'strike-through' : ''
+                          className={`flex flex-col ${
+                            item.completed === true
+                              ? 'line-through text-slate-400'
+                              : ''
                           }`}
                         >
                           {item.task}
@@ -195,9 +202,8 @@ const CardDetails = (props) => {
                       </div>
                     ))
                   ) : (
-                    <>No Task</>
+                    <></>
                   )}
-
                   <Editable
                     text="Add Task"
                     btnName="Add Task"
@@ -205,40 +211,50 @@ const CardDetails = (props) => {
                   />
                 </div>
               </div>
-            </div>
-            <div className="flex flex-col-4">
-              <h6>Add to card</h6>
-              <div className="flex flex-col gap-2">
-                <button onClick={() => setLabelShow(true)}>
-                  <span>
-                    <Tag />
-                  </span>
-                  Add Label
-                </button>
-                {labelShow && (
-                  <Label
-                    color={colors}
-                    addTag={addTag}
-                    tags={values.tags}
-                    onClose={setLabelShow}
-                  />
-                )}
-                <button>
-                  <span>Date</span>
-                </button>
 
-                <button onClick={() => props.removeCard(props.bid, values.id)}>
-                  <span>
-                    <CgTrash />
-                  </span>
-                  Delete Card
-                </button>
+              <div className="flex flex-col">
+                <h6 className="text-lg">Add to card</h6>
+                <div className="flex flex-col gap-2 mt-3">
+                  <button
+                    onClick={() => setLabelShow(true)}
+                    className="bg-slate-200 py-2 rounded-lg flex flex-row items-center gap-3 px-3"
+                  >
+                    <span>
+                      <BsTag />
+                    </span>
+                    Add Label
+                  </button>
+                  {labelShow && (
+                    <Label
+                      color={colors}
+                      addTag={addTag}
+                      tags={values.tags}
+                      onClose={setLabelShow}
+                    />
+                  )}
+                  <button className="bg-slate-200 py-2 rounded-lg flex flex-row items-center gap-3 px-3">
+                    <span>
+                      <BsClock />
+                    </span>
+                    Date
+                  </button>
+
+                  <button
+                    onClick={() => props.removeCard(props.bid, values.id)}
+                    className="bg-slate-200 py-2 rounded-lg flex flex-row items-center gap-3 px-3"
+                  >
+                    <span>
+                      <CgTrash />
+                    </span>
+                    Delete Card
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </Modal>
-    </>
+      </div>
+    </Modal>
   );
 };
 

@@ -25,11 +25,12 @@
 
 .modal__content {
   overflow-y: auto;
-  max-height: 95vh;
+  max-height: 80vh;
   background-color: #fff;
   border-radius: 10px;
   box-shadow: 1px 1px 20px rgba(0, 0, 0, 0.12);
   padding: 20px;
+  width: 45%;
 }
 
 .modal__content::-webkit-scrollbar {

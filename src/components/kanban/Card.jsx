@@ -13,7 +13,7 @@ const Card = (props) => {
   const [modalShow, setModalShow] = useState(false);
 
   return (
-    <div className="border border-slate-200 rounded-lg p-3 mb-3 shadow-xl">
+    <div className="border border-slate-200 rounded-lg p-3 mb-3 shadow-xl bg-sky-50 hover:border-2 hover:border-slate-500">
       <Draggable
         key={props.id.toString()}
         draggableId={props.id.toString()}
@@ -46,7 +46,7 @@ const Card = (props) => {
                   }}
                 />
               </div>
-              <div>
+              <div className="flex gap-2 text-sm py-1">
                 {props.tags?.map((item, index) => (
                   <Tag key={index} tagName={item.tagName} color={item.color} />
                 ))}
@@ -54,7 +54,7 @@ const Card = (props) => {
 
               <div>
                 {props.card.task.length !== 0 && (
-                  <div>
+                  <div className="flex gap-2 items-center">
                     <IoMdCheckboxOutline />
                     <span>
                       {props.card.task.length !== 0
@@ -62,7 +62,7 @@ const Card = (props) => {
                             (props.card.task?.filter(
                               (item) => item.completed === true
                             )).length
-                          } / ${props.card.task.length}`
+                          }/${props.card.task.length}`
                         : `${'0/0'}`}
                     </span>
                   </div>

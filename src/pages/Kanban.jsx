@@ -19,34 +19,27 @@ const Kanban = () => {
     setData(tempData);
   };
 
-  const dragCardInBoard = (src, destination) => {
+  const dragCardInBoard = (source, destination) => {
     let tempData = [...data];
     const destinationBoardIndex = tempData.findIndex(
-      (item) => item.id.toString() === destination.doppableId
+      (item) => item.id.toString() === destination.droppableId
     );
 
     const sourceBoardIndex = tempData.findIndex(
-      (item) => item.id.toString() === src.droppableId
+      (item) => item.id.toString() === source.droppableId
     );
 
     // Insert the dragged card at the specific position in the destination board
     tempData[destinationBoardIndex].card.splice(
       destination.index,
       0,
-      tempData[sourceBoardIndex.card[src.index]]
+      tempData[sourceBoardIndex].card[source.index]
     );
 
     // Remove the card from the source board at the original index
-    tempData[sourceBoardIndex].card.splice(src.index, 1);
-  };
+    tempData[sourceBoardIndex].card.splice(source.index, 1);
 
-  const onDragEnd = (result) => {
-    const { src, destination } = result;
-    if (!destination) return;
-
-    if (src.droppableId === destination.droppableId) return;
-
-    setData(dragCardInBoard(src, destination));
+    return tempData;
   };
 
   const addCard = (title, bid) => {
@@ -87,6 +80,16 @@ const Kanban = () => {
     const index = data.findIndex((item) => item.id === bid);
     tempData.splice(index, 1);
     setData(tempData);
+  };
+
+  const onDragEnd = (result) => {
+    const { source, destination } = result;
+
+    if (!destination) return;
+
+    if (source.droppableId === destination.droppableId) return;
+
+    setData(dragCardInBoard(source, destination));
   };
 
   const updateCard = (bid, cid, card) => {

@@ -31,7 +31,6 @@ const App = () => {
   };
 
   const onEventDrop = (data) => {
-    console.log(data);
     const { start, end, title } = data;
     setEvents((prevEvents) =>
       prevEvents.map((event, index) =>

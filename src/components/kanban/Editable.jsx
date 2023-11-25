@@ -4,8 +4,6 @@ import { GrFormClose, GrFormAdd } from 'react-icons/gr';
 const Editable = (props) => {
   const [show, setShow] = useState(props?.handler || false);
   const [text, setText] = useState(props?.defaultValue || '');
-  console.log('Editable Component Props:', props);
-  console.log('Editable Component State - text:', text === '');
 
   const handleOnSubmit = (e) => {
     e.preventDefault();

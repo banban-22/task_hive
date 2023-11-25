@@ -19,10 +19,10 @@ const Board = (props) => {
         if (e.code === 'Enter') setShow(false);
       });
     };
-  });
+  }, []);
 
   return (
-    <div className="w-5/12 border pt-2 pb-3 px-3 rounded-lg bg-sky-100">
+    <div className="w-5/12 border pt-2 pb-3 px-3 rounded-lg bg-slate-300">
       <div className="flex items-center justify-between">
         {show ? (
           <div>
@@ -40,7 +40,7 @@ const Board = (props) => {
             >
               {props?.name || 'Name of Board'}
             </p>
-            <span className="border border-slate-500 bg-white px-5 rounded-xl">
+            <span className="bg-slate-500 px-5 rounded-xl text-white drop-shadow-lg">
               {props.card?.length}
             </span>
           </div>
@@ -48,10 +48,10 @@ const Board = (props) => {
         <div onClick={() => setDropdown(true)} className="">
           <GoKebabHorizontal />
           {dropdown && (
-            <DropDown>
+            <DropDown onClose={() => setDropdown(false)}>
               <button
-                onClick={() => props.removeBoard(props.id)}
                 className="bg-gray-200 rounded-lg py-2 px-4"
+                onClick={() => props.removeBoard(props.id)}
               >
                 Delete Board
               </button>

@@ -9,7 +9,6 @@ import ProgressBar from '@ramonak/react-progress-bar';
 import Editable from './Editable';
 import Modal from './Modal';
 import Label from './Label';
-import Tag from './Tag';
 
 const CardDetails = (props) => {
   const colors = ['#61bd4f', '#f2d600', '#ff9f1a', '#eb5a46', '#c377e0'];
@@ -17,6 +16,7 @@ const CardDetails = (props) => {
   const [input, setInput] = useState(false);
   const [text, setText] = useState(values.title);
   const [labelShow, setLabelShow] = useState(false);
+  const [labels, setLabels] = useState([...values.tags]);
 
   const Input = (props) => {
     return (
@@ -32,7 +32,6 @@ const CardDetails = (props) => {
   };
 
   const addTask = (value) => {
-    console.log('Before Adding task:', value);
     setValues((prevValues) => ({
       ...prevValues,
       task: [
@@ -40,7 +39,6 @@ const CardDetails = (props) => {
         { id: uuidv4(), task: value, completed: false },
       ],
     }));
-    console.log('After Adding task:', value);
   };
 
   const removeTask = (id) => {
@@ -134,10 +132,13 @@ const CardDetails = (props) => {
               <div className="flex flex-col justify-between">
                 <div className="flex flex-col gap-3">
                   <h5 className="text-justify mt-2 text-lg">Label</h5>
-                  <div className="w-full pr-1">
+                  <div className="w-full pr-1 flex gap-2">
                     {(values.tags.length ?? []) !== 0 ? (
                       (values.tags ?? []).map((item) => (
-                        <span className="justify-between items-center gap-2">
+                        <span
+                          className="flex items-center gap-2 rounded-lg px-3 w-1/4 py-2 justify-around"
+                          style={{ backgroundColor: item.color }}
+                        >
                           {item.tagName.length > 10
                             ? item.tagName.slice(0, 6) + '...'
                             : item.tagName}
@@ -155,7 +156,7 @@ const CardDetails = (props) => {
                 <div className="flex items-center justify-between gap-10 pt-5">
                   <div className="flex items-center gap-3">
                     <MdOutlineCheckBox className="text-xl" />
-                    <h6>Check List</h6>
+                    <h6>Task List</h6>
                   </div>
                   <div className="bg-slate-200 py-2 px-4 rounded-lg shadow-lg hover:bg-white pointer">
                     <button onClick={() => deleteAllTask()}>Delete All</button>
@@ -174,7 +175,6 @@ const CardDetails = (props) => {
                 </div>
 
                 <div className="my-2 w-full">
-                  {console.log('Card Details:', values.task)}
                   {values.task.length !== 0 ? (
                     values.task.map((item, index) => (
                       <div className="flex items-center gap-2 pb-3 text-xl">
@@ -227,8 +227,11 @@ const CardDetails = (props) => {
                   {labelShow && (
                     <Label
                       color={colors}
-                      addTag={addTag}
-                      tags={values.tags}
+                      addTag={(value, color) => {
+                        addTag(value, color);
+                        setLabels([...values.tags]);
+                      }}
+                      tags={labels}
                       onClose={setLabelShow}
                     />
                   )}

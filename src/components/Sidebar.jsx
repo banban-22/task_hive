@@ -16,7 +16,7 @@ const Sidebar = () => {
             </Link>
           </div>
           <ul className="flex flex-col gap-3 space-y-2 items-start p-2 font-medium text-lg ">
-            <li className="w-full">
+            {/* <li className="w-full">
               <Link
                 to="/dashboard"
                 className="flex items-center justify-start hover:bg-sky-800 hover:text-white rounded-lg p-2 group"
@@ -24,7 +24,7 @@ const Sidebar = () => {
                 <GoHome />
                 <span className="pl-3">Home</span>
               </Link>
-            </li>
+            </li> */}
             <li className="w-full">
               <Link
                 to="/todo"
@@ -43,7 +43,7 @@ const Sidebar = () => {
                 <span className="pl-3">Kanban</span>
               </Link>
             </li>
-            <li className="w-full">
+            {/* <li className="w-full">
               <Link
                 to="/calendar"
                 className="flex items-center justify-start hover:bg-sky-800 hover:text-white rounded-lg p-2 group"
@@ -51,7 +51,7 @@ const Sidebar = () => {
                 <GoCalendar />
                 <span className="pl-3">Calendar</span>
               </Link>
-            </li>
+            </li> */}
           </ul>
         </nav>
       </aside>

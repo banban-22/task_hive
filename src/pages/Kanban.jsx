@@ -50,6 +50,7 @@ const Kanban = () => {
       title,
       tags: [],
       task: [],
+      date: '',
     });
 
     setData(tempData);

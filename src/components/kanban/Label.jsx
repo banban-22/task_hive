@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { RxCross2, RxCheck } from 'react-icons/rx';
 
 const Label = (props) => {

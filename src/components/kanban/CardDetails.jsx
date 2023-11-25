@@ -1,14 +1,16 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { MdTaskAlt, MdOutlineCheckBox, MdCreditCard } from 'react-icons/md';
 import { GrFormClose } from 'react-icons/gr';
 import { CgTrash } from 'react-icons/cg';
 import { BsClock, BsTag } from 'react-icons/bs';
 import ProgressBar from '@ramonak/react-progress-bar';
+import { formatDate } from '../../utils/helpers';
 
 import Editable from './Editable';
 import Modal from './Modal';
 import Label from './Label';
+import DueDate from './DueDate';
 
 const CardDetails = (props) => {
   const colors = ['#61bd4f', '#f2d600', '#ff9f1a', '#eb5a46', '#c377e0'];
@@ -17,6 +19,9 @@ const CardDetails = (props) => {
   const [text, setText] = useState(values.title);
   const [labelShow, setLabelShow] = useState(false);
   const [labels, setLabels] = useState([...values.tags]);
+  const [dateShow, setDateShow] = useState(false);
+  const [dueDate, setDueDate] = useState('');
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const Input = (props) => {
     return (
@@ -60,9 +65,12 @@ const CardDetails = (props) => {
     setValues({ ...values });
   };
 
-  const updateTitle = (value) => {
-    setValues({ ...values, title: value });
-  };
+  const updateTitle = useCallback(
+    (value) => {
+      setValues({ ...values, title: value });
+    },
+    [values]
+  );
 
   const calculatePercentage = () => {
     const totalTask = values.task.length;
@@ -89,23 +97,38 @@ const CardDetails = (props) => {
     });
   };
 
-  const handleClickListener = (e) => {
-    if (e.code === 'Enter') {
-      setInput(false);
-      updateTitle(text === '' ? values.title : text);
-    } else return;
+  const updateDueDate = (date) => {
+    setDueDate(date ? date.toString() : '');
+    setSelectedDate(date);
+
+    // Update the dueDate property in values directly
+    setValues({
+      ...values,
+      date: date ? date.toString() : '',
+    });
   };
 
   useEffect(() => {
+    const handleClickListener = (e) => {
+      if (e.code === 'Enter') {
+        setInput(false);
+        updateTitle(text === '' ? values.title : text);
+      }
+    };
+
     document.addEventListener('keypress', handleClickListener);
     return () => {
       document.removeEventListener('keypress', handleClickListener);
     };
-  });
+  }, [text, updateTitle, values.title]);
 
   useEffect(() => {
-    if (props.updateCard) props.updateCard(props.bid, values.id, values);
-  }, [values]);
+    if (props.updateCard) {
+      if (values !== props.card) {
+        props.updateCard(props.bid, values.id, values);
+      }
+    }
+  }, [props, values]);
 
   return (
     <Modal onClose={props.onClose}>
@@ -136,6 +159,7 @@ const CardDetails = (props) => {
                     {(values.tags.length ?? []) !== 0 ? (
                       (values.tags ?? []).map((item) => (
                         <span
+                          key={item.id}
                           className="flex items-center gap-2 rounded-lg px-3 w-1/4 py-2 justify-around"
                           style={{ backgroundColor: item.color }}
                         >
@@ -152,6 +176,16 @@ const CardDetails = (props) => {
                     )}
                   </div>
                 </div>
+                <div className="w-full mt-3 border px-3 rounded-lg">
+                  {values.date && (
+                    <div className="w-full flex">
+                      <h5 className="w-1/3 mt-2 text-sm">Due Date</h5>
+                      <div className="w-auto flex items-center rounded-lg px-3 py-2 text-sm">
+                        {formatDate(values.date)}
+                      </div>
+                    </div>
+                  )}
+                </div>
 
                 <div className="flex items-center justify-between gap-10 pt-5">
                   <div className="flex items-center gap-3">
@@ -162,18 +196,15 @@ const CardDetails = (props) => {
                     <button onClick={() => deleteAllTask()}>Delete All</button>
                   </div>
                 </div>
-                {/* bg-slate-200 hover:bg-white rounded-lg px-4 py-2 pointer flex items-center gap-1 shadow-lg w-full */}
-
                 <div className="my-2">
                   <div>Progress(%)</div>
                   <ProgressBar
                     completed={calculatePercentage()}
-                    bgColor="#61bd4f"
+                    backgroundColor="#61bd4f"
                     width="25rem"
                     height="20px"
                   />
                 </div>
-
                 <div className="my-2 w-full">
                   {values.task.length !== 0 ? (
                     values.task.map((item, index) => (
@@ -232,15 +263,24 @@ const CardDetails = (props) => {
                         setLabels([...values.tags]);
                       }}
                       tags={labels}
-                      onClose={setLabelShow}
+                      onClose={() => setLabelShow(false)}
                     />
                   )}
-                  <button className="bg-slate-200 py-2 rounded-lg flex flex-row items-center gap-3 px-3">
+                  <button
+                    className="bg-slate-200 py-2 rounded-lg flex flex-row items-center gap-3 px-3"
+                    onClick={() => setDateShow(true)}
+                  >
                     <span>
                       <BsClock />
                     </span>
                     Date
                   </button>
+                  {dateShow && (
+                    <DueDate
+                      onDateChange={(date) => updateDueDate(date)}
+                      onClose={() => setDateShow(false)}
+                    />
+                  )}
 
                   <button
                     onClick={() => props.removeCard(props.bid, values.id)}

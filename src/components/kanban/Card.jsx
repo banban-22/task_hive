@@ -1,10 +1,8 @@
-import { useEffect, useRef, useState } from 'react';
+import { useState } from 'react';
 import { Draggable } from 'react-beautiful-dnd';
 import { IoMdCheckboxOutline } from 'react-icons/io';
 import { GoKebabHorizontal } from 'react-icons/go';
 
-// import DropDown from './DropDown';
-// import Modal from './Modal';
 import Tag from './Tag';
 import CardDetails from './CardDetails';
 

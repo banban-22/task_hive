@@ -1,5 +1,4 @@
 import { Link } from 'react-router-dom';
-import { GoHome, GoCalendar } from 'react-icons/go';
 import { LuKanbanSquare, LuListTodo } from 'react-icons/lu';
 
 const Sidebar = () => {

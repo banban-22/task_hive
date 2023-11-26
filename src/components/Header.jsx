@@ -1,7 +1,7 @@
-import { useState } from 'react';
+// import { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { LuKanbanSquare, LuListTodo } from 'react-icons/lu';
-import Button from './Button';
+// import Button from './Button';
 // import { username } from '../constants';
 
 const Header = () => {
@@ -41,13 +41,3 @@ const Header = () => {
   );
 };
 export default Header;
-
-// <header className="flex flex-row justify-end items-center px-5 h-20 border-b-2 border-gray-100 w-full">
-{
-  /* {isLoggedIn ? (
-        <div>username</div>
-      ) : ( */
-}
-// <Link to="/login" className="">
-//   {/* <Button to="/login">Login</Button> */}
-// </Link>;

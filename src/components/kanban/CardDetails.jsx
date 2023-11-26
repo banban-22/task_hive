@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { MdTaskAlt, MdOutlineCheckBox, MdCreditCard } from 'react-icons/md';
+import { MdOutlineCheckBox, MdCreditCard } from 'react-icons/md';
 import { GrFormClose } from 'react-icons/gr';
 import { CgTrash } from 'react-icons/cg';
 import { BsClock, BsTag } from 'react-icons/bs';

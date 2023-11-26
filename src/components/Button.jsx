@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-
 const Button = ({ children, to, type, disabled, onClick }) => {
   const base = 'border rounded-lg px-5 py-3 mb-3 ';
   const styles = {

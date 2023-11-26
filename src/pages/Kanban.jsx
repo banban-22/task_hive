@@ -114,9 +114,11 @@ const Kanban = () => {
 
   return (
     <div>
-      <h2 className="text-2xl my-3 font-bold">Kanban</h2>
+      <h2 className="text-2xl my-3 font-bold text-center lg:text-start lg:ml-40 xl:ml-0">
+        Kanban
+      </h2>
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="flex flex-row gap-3">
+        <div className="flex gap-3 flex-col w-auto justify-center items-center lg:flex-row lg:items-start xl:justify-start">
           {data.map((item) => (
             <Board
               key={item.id}

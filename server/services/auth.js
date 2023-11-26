@@ -1,7 +1,11 @@
-import mongoose from 'mongoose';
-import passport from 'passport';
-import { Strategy as LocalStrategy } from 'passport-local';
+// import mongoose from 'mongoose';
+// import passport from 'passport';
+// import { Strategy as LocalStrategy } from 'passport-local';
+const mongoose = require('mongoose');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
+// const User = mongoose.model('user');
 const User = mongoose.model('user');
 
 passport.serializeUser((user, callback) => {
@@ -9,7 +13,7 @@ passport.serializeUser((user, callback) => {
 });
 
 passport.deserializeUser((id, callback) => {
-  User.frindById(id, (error, user) => {
+  User.findById(id, (error, user) => {
     callback(error, user);
   });
 });
@@ -38,59 +42,41 @@ passport.use(
 );
 
 const signup = async ({ email, password, req }) => {
+  const user = new User({ email, password });
+
   if (!email || !password) {
     throw new Error('You must provide an email and password');
   }
 
-  // eslint-disable-next-line no-useless-catch
-  try {
-    const existingUser = await User.findOne({ email });
-
-    if (existingUser) {
-      throw new Error('This email address is already in use');
-    }
-
-    const user = new User({ email, password, name });
-    await user.save();
-
-    await new Promise((resolve, reject) => {
-      req.login(user, (error) => {
-        if (error) {
-          reject(error);
-        }
-        resolve(user);
-      });
-    });
-    return user;
-  } catch (error) {
-    throw error;
-  }
-};
-
-const login = async ({ email, password, req }) => {
-  // eslint-disable-next-line no-useless-catch
-  try {
-    const authenticateAsync = (options) => {
+  return User.findOne({ email })
+    .then((existingUser) => {
+      if (existingUser) {
+        throw new Error('This email address is already in use');
+      }
+      return user.save();
+    })
+    .then((user) => {
       return new Promise((resolve, reject) => {
-        passport.authenticate('local', (error, user) => {
-          if (error) {
-            reject(error);
+        req.login(user, (err) => {
+          if (err) {
+            reject(err);
           }
-          if (!user) {
-            reject('Incorrect email or password');
-          }
-          req.login(user, () => {
-            resolve(user)(options);
-          });
+          resolve(user);
         });
       });
-    };
-
-    await authenticateAsync({ body: { email, password } });
-  } catch (error) {
-    throw error;
-  }
+    });
 };
+
+function login({ email, password, req }) {
+  return new Promise((resolve, reject) => {
+    passport.authenticate('local', (err, user) => {
+      if (!user) {
+        reject('You must provide an email and password');
+      }
+      req.login(user, () => resolve(user));
+    })({ body: { email, password } });
+  });
+}
 
 // const logout = (req) => {
 //   return new Promise((resolve, reject) => {
@@ -103,4 +89,5 @@ const login = async ({ email, password, req }) => {
 //   });
 // };
 
-export default { signup, login };
+// export default { signup, login };
+module.exports = { signup, login };

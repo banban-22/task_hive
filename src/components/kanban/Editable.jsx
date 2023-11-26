@@ -25,7 +25,7 @@ const Editable = (props) => {
     <div id="add-board" className="w-36">
       {show ? (
         <form action="" onSubmit={handleOnSubmit} className="w-3/12">
-          <div className="flex justify-between items-center gap-5">
+          <div className="flex justify-between items-center gap-5 lg:flex-col lg:justify-center lg:w-auto lg:ml-20">
             <input
               type="text"
               placeholder={props.placeholder || 'Task'}
@@ -34,16 +34,18 @@ const Editable = (props) => {
               autoFocus
               onChange={(e) => setText(e.target.value)}
             />
-            <button
-              className="bg-slate-200 rounded-lg py-2 px-4 shadow-lg hover:bg-white cursor-pointer"
-              type="submit"
-            >
-              {`${props.btnName}` || 'Add'}
-            </button>
-            <GrFormClose
-              className="font-bold text-lg cursor-pointer"
-              onClick={onCloseButton}
-            />
+            <div className="lg:flex lg:items-center lg:gap-5">
+              <button
+                className="bg-slate-200 rounded-lg py-2 px-4 shadow-lg hover:bg-white cursor-pointer"
+                type="submit"
+              >
+                {`${props.btnName}` || 'Add'}
+              </button>
+              <GrFormClose
+                className="font-bold text-lg cursor-pointer lg:text-2xl"
+                onClick={onCloseButton}
+              />
+            </div>
           </div>
         </form>
       ) : (

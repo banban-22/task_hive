@@ -22,7 +22,7 @@ const Board = (props) => {
   }, []);
 
   return (
-    <div className="w-5/12 border pt-2 pb-3 px-3 rounded-lg bg-slate-300">
+    <div className="w-4/5 md:w-3/5 lg:w-5/12 border pt-2 pb-3 px-3 rounded-lg bg-slate-300">
       <div className="flex items-center justify-between">
         {show ? (
           <div>
@@ -33,7 +33,7 @@ const Board = (props) => {
             />
           </div>
         ) : (
-          <div className="flex items-center ">
+          <div className="flex items-center">
             <p
               onClick={() => setShow(true)}
               className="py-5 rounded-lg px-3 text-lg font-bold cursor-pointer"

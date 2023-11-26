@@ -1,8 +1,10 @@
-import bcrypt from 'bcrypt-nodejs';
+// import bcrypt from 'bcrypt-nodejs';
 // import crypto from 'crypto';
-import mongoose from 'mongoose';
-
-const { Schema } = mongoose;
+// import mongoose from 'mongoose';
+const bcrypt = require('bcrypt-nodejs');
+const crypto = require('crypto');
+const mongoose = require('mongoose');
+const Schema = mongoose.Schema;
 
 // Define the User schema
 const UserSchema = new Schema({
@@ -24,7 +26,7 @@ UserSchema.pre('save', function save(next) {
     if (error) {
       return next(error);
     }
-    bcrypt.hash(user.password, salt, null, (error, hash) => {
+    bcrypt.hash(user.password, salt, (error, hash) => {
       if (error) {
         return next(error);
       }
@@ -34,11 +36,12 @@ UserSchema.pre('save', function save(next) {
   });
 });
 
+// attach comparePassword method to UserSchema
 UserSchema.methods.comparePassword = function comparePassword(
-  candidatePassword,
+  userPassword,
   callback
 ) {
-  bcrypt.compare(candidatePassword, this.password, (error, isMatch) => {
+  bcrypt.compare(userPassword, this.password, (error, isMatch) => {
     callback(error, isMatch);
   });
 };

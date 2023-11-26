@@ -1,14 +1,16 @@
 const express = require('express');
 const session = require('express-session');
-const { graphqlHTTP } = require('graphql-http');
+const expressGraphQL = require('express-graphql');
 const mongoose = require('mongoose');
 const passport = require('passport');
 const MongoStore = require('connect-mongo');
 const schema = require('./schema/schema');
-const webpackMiddleware = require('webpack-dev-middleware');
-const webpack = require('webpack');
-const webpackConfig = require('../webpack.config.js');
 
+// const models = require('./models');
+// const expressGraphQL = require('express-graphql');
+// const passportConfig = require('./services/auth');
+
+const User = require('./models/user');
 // Express Application Setup
 const app = express();
 const MONGO_URI =
@@ -19,13 +21,13 @@ if (!MONGO_URI || MONGO_URI.length === 0) {
 
 // MongoDB Connection
 // mongoose.Promise = global.Promise;
+mongoose.Promise = global.Promise;
 mongoose.set('strictQuery', false);
 mongoose.connect(MONGO_URI);
-mongoose.connection
-  .once('open', () => console.log('Connected to Mongo Atlas'))
-  .on('error', (err) => {
-    console.error('Error connecting to Mongo Atlas', err);
-  });
+mongoose.connection.once('open', () => console.log('Connected to Mongo Atlas'));
+mongoose.model('user', User).on('error', (err) => {
+  console.error('Error connecting to Mongo Atlas', err);
+});
 
 //   Sessison Management
 app.use(
@@ -47,13 +49,17 @@ app.use(passport.session());
 // GraphQL Setup
 app.use(
   '/graphql',
-  graphqlHTTP({
+  expressGraphQL({
     schema,
     graphiql: true,
   })
 );
 
 // Webpack Setup
+const webpackMiddleware = require('webpack-dev-middleware');
+const webpack = require('webpack');
+const webpackConfig = require('../webpack.config.js');
 app.use(webpackMiddleware(webpack(webpackConfig)));
 
-export default app;
+// export default app;
+module.exports = app;

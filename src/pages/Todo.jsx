@@ -76,10 +76,10 @@ const Todo = () => {
   }, []);
 
   return (
-    <div>
+    <div className="px-3 w-auto flex flex-col text-center items-center">
       <form
         onSubmit={handleSubmit}
-        className="flex justify-start p-3 items-center gap-3 border-b-2"
+        className="flex flex-col mt-3 justify-start p-3 gap-3 border-b-2 lg:flex-row lg:items-center"
       >
         <label htmlFor="">New Task</label>
         <input
@@ -148,7 +148,9 @@ const Todo = () => {
             );
           })
         ) : (
-          <div>You don't have any task</div>
+          <div className="text-center lg:text-start">
+            You don't have any task
+          </div>
         )}
       </div>
     </div>

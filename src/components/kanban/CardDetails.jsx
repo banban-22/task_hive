@@ -151,7 +151,7 @@ const CardDetails = (props) => {
               </div>
             </div>
 
-            <div className="flex justify-between px-2">
+            <div className="flex flex-col lg:flex-row justify-between px-2">
               <div className="flex flex-col justify-between">
                 <div className="flex flex-col gap-3">
                   <h5 className="text-justify mt-2 text-lg">Label</h5>

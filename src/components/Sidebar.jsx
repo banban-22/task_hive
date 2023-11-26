@@ -5,8 +5,8 @@ import { LuKanbanSquare, LuListTodo } from 'react-icons/lu';
 const Sidebar = () => {
   return (
     <>
-      <aside className="border border-r-1 grid-rows-1 flex flex-col gap-3 top-0 left-0 z-30 w-64 fixed h-screen transition-transform -translate-x-full sm:translate-x-0 ">
-        <nav className="h-full px-3 py-4 overflow-y-auto bg-sky-50 ">
+      <aside className="lg:border lg:border-r-1 grid-rows-1 flex flex-col gap-3 top-0 left-0 z-30 w-64 fixed h-screen transition-transform -translate-x-full sm:translate-x-0 ">
+        <nav className="lg:h-full lg:px-3 lg:py-4 lg:w-auto overflow-y-auto bg-sky-50 sm:h-0 sm:w-0">
           <div className="pb-10">
             <Link
               to="/"

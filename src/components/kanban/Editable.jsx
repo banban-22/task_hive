@@ -18,14 +18,14 @@ const Editable = (props) => {
 
   const onCloseButton = () => {
     setShow(false);
-    props?.setHandler(false);
+    // props?.handler(false);
   };
 
   return (
     <div id="add-board" className="w-36">
       {show ? (
         <form action="" onSubmit={handleOnSubmit} className="w-3/12">
-          <div className="flex justify-between items-center gap-5 lg:flex-col lg:justify-center lg:w-auto lg:ml-20">
+          <div className="flex flex-col lg:justify-between items-center gap-5 lg:flex-row justify-center lg:w-auto ml-20 lg:ml-0">
             <input
               type="text"
               placeholder={props.placeholder || 'Task'}
@@ -34,7 +34,7 @@ const Editable = (props) => {
               autoFocus
               onChange={(e) => setText(e.target.value)}
             />
-            <div className="lg:flex lg:items-center lg:gap-5">
+            <div className="flex items-center gap-5">
               <button
                 className="bg-slate-200 rounded-lg py-2 px-4 shadow-lg hover:bg-white cursor-pointer"
                 type="submit"

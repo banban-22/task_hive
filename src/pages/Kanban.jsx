@@ -134,7 +134,7 @@ const Kanban = () => {
           ))}
           <Editable
             name="Add Board"
-            btnName="Add Board"
+            btnName="Add"
             onSubmit={addBoard}
             placeholder="Enter Board Name"
           />
